@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="32dp"
+    >
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/box_main"
+        >
+        <TextView
+            android:id="@+id/title_game"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:scaleType="centerInside"
+            android:layout_centerHorizontal="true"
+            android:text="GAME DEAL"
+            android:textSize="64px"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="20dp"
+            />
+        <TextView
+            android:id="@+id/point_bot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:scaleType="centerInside"
+            android:layout_gravity="center_horizontal"
+            android:text="Choose your bet!"
+            android:textSize="56px"
+            android:layout_marginTop="16dp"
+            android:textColor="@color/black"
+            />
+            <Button
+                android:id="@+id/btn_f"
+                android:layout_width="70dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/lay_cards"
+                android:text="5"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="#034616"
+                android:textColorLink="#034616"
+                android:layout_margin="10dp"/>
+            <Button
+                android:id="@+id/btn_t"
+                android:layout_width="70dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/lay_cards"
+                android:text="10"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="#034616"
+                android:textColorLink="#034616"
+                android:layout_margin="10dp"/>
+            <Button
+                android:id="@+id/btn_ft"
+                android:layout_width="70dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/lay_cards"
+                android:text="15"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:backgroundTint="#034616"
+                android:textColorLink="#034616"
+                android:layout_marginBottom="30dp"/>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
