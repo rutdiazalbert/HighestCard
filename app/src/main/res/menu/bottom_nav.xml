@@ -3,7 +3,7 @@
 
     <item android:title="Play"
         android:id="@+id/btn_play"
-        android:icon="@drawable/baseline_play_circle_outline_24"
+        android:icon="@drawable/baseline_casino_24"
 
         />
     <item android:title="Ranking"

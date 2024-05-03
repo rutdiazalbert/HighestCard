@@ -69,19 +69,19 @@ class RankingActivity : AppCompatActivity() {
             headerRow.layoutParams = headerLayoutParams
 
             val nombreHeader = TextView(this)
-            nombreHeader.text = "Nombre"
+            nombreHeader.text = "Name"
             nombreHeader.setPadding(16, 16, 16, 16)
             nombreHeader.setTextColor(Color.WHITE)
             nombreHeader.setTextSize(1, 24F)
 
             val partidasHeader = TextView(this)
-            partidasHeader.text = "Partidas"
+            partidasHeader.text = "Games"
             partidasHeader.setPadding(16, 16, 16, 16)
             partidasHeader.setTextColor(Color.WHITE)
             partidasHeader.setTextSize(1, 24F)
 
             val puntuacionHeader = TextView(this)
-            puntuacionHeader.text = "Puntuación"
+            puntuacionHeader.text = "Score"
             puntuacionHeader.setPadding(16, 16, 16, 16)
             puntuacionHeader.setTextColor(Color.WHITE)
             puntuacionHeader.setTextSize(1, 24F)
@@ -119,7 +119,7 @@ class RankingActivity : AppCompatActivity() {
                 row.addView(partidasTextView)
                 row.addView(puntuacionTextView)
 
-                tableLayout.addView(row, i + 1) // Añadir 1 para dejar espacio para la fila de encabezado
+                tableLayout.addView(row, i + 1)
             }
         }
     }

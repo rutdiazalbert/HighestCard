@@ -43,7 +43,7 @@
                     android:id="@+id/textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="PLAYER"
+                    android:text="@string/player"
                     android:textAlignment="center"
                     android:textColor="#034616"
                     android:textSize="34sp"
@@ -56,9 +56,16 @@
                     android:layout_marginTop="25dp"
                     android:background="@drawable/box_main"
                     android:ems="10"
-                    android:hint="Name"
+                    android:hint="@string/name"
                     android:inputType="text"
                     android:paddingLeft="20dp" />
+
+                <Spinner
+                    android:id="@+id/language_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp" />
 
                 <Button
                     android:id="@+id/btn_submit"
@@ -66,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:backgroundTint="#034616"
-                    android:text="SUBMIT"
+                    android:text="@string/submit"
                     android:textColorLink="#034616"
                     android:textSize="20sp" />
             </LinearLayout>
@@ -80,19 +87,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/menu_bar"
-        app:itemIconSize="30dp"
+        app:itemIconSize="40dp"
         app:itemTextColor="@drawable/menu_bar_selected"
         app:itemIconTint="@drawable/menu_bar_selected"
         app:menu="@menu/bottom_nav"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:labelVisibilityMode="unlabeled"
         android:layout_marginBottom="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="30dp"
         android:layout_marginStart="30dp"
-        android:gravity="center"
-        android:elevation="5dp" />
+        android:gravity="center" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

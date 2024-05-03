@@ -66,10 +66,11 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         return db.update(TABLE_NAME, values, NAME_COl + " = ?", arrayOf(nombre))
     }
 
+
     companion object{
         private val DATABASE_NAME = "HIGHEST_CARD"
 
-        private val DATABASE_VERSION = 1
+        private val DATABASE_VERSION = 3
 
         val TABLE_NAME = "players"
 

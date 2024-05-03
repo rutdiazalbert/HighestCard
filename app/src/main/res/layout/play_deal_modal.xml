@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -12,6 +13,16 @@
         android:orientation="vertical"
         android:background="@drawable/box_main"
         >
+        <ImageButton
+            android:id="@+id/btn_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/baseline_emoji_objects_24"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            />
         <TextView
             android:id="@+id/title_game"
             android:layout_width="wrap_content"
@@ -59,7 +70,7 @@
                 android:layout_gravity="center_horizontal"
                 android:backgroundTint="#034616"
                 android:textColorLink="#034616"
-                android:layout_margin="10dp"/>
+                android:layout_marginBottom="10dp"/>
             <Button
                 android:id="@+id/btn_ft"
                 android:layout_width="70dp"
@@ -72,5 +83,18 @@
                 android:textColorLink="#034616"
                 android:layout_marginBottom="30dp"/>
 
+        <WebView
+            android:id="@+id/webview_help"
+            android:layout_width="260dp"
+            android:layout_marginStart="20dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_marginTop="10dp"
+            android:background="#0B83E3"
+            tools:ignore="WebViewLayout"
+            android:layout_marginBottom="10dp"/>
+
     </LinearLayout>
+
 </androidx.cardview.widget.CardView>
+

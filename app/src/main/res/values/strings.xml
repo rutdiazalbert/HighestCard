@@ -1,3 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">HighestCardWinGame</string>
+
+    <string-array name="languages">
+        <item>English</item>
+        <item>Español</item>
+        <item>Català</item>
+    </string-array>
+
+    <string name="player">PLAYER</string>
+    <string name="name">Name</string>
+    <string name="submit">SUBMIT</string>
+    <string name="play">Play</string>
+    <string name="ranking">Ranking</string>
+
+
+    <string name="app_name">HIGHEST CARD BATTLE</string>
+    <string name="total_points">Total points</string>
+
+
 </resources>

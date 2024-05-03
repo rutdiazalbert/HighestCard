@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="player">JUGADOR</string>
+    <string name="name">Nom</string>
+    <string name="submit">ENVIAR</string>
+    <string name="play">Jugar</string>
+    <string name="ranking">Rànquing</string>
+
+
+    <string name="app_name">JOC CARTA MÉS ALTA</string>
+    <string name="total_points">Punts totals</string>
+
+
+</resources>

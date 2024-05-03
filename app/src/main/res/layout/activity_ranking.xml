@@ -42,18 +42,17 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/menu_bar"
-        app:itemIconSize="30dp"
+        app:itemIconSize="40dp"
         app:itemTextColor="@drawable/menu_bar_selected"
         app:itemIconTint="@drawable/menu_bar_selected"
         app:menu="@menu/bottom_nav"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:labelVisibilityMode="unlabeled"
-        android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginStart="30dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="30dp"
-        android:gravity="center"
-        android:elevation="5dp" />
+        android:layout_marginStart="30dp"
+        android:gravity="center" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
