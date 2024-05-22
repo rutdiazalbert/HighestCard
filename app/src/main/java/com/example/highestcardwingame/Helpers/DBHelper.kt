@@ -14,12 +14,56 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
                 POINTS_COL + " INT," +
                 GAMES_COL + " INT" + ")")
         db.execSQL(query)
+
+        val potQuery = ("CREATE TABLE " + POT_TABLE_NAME + " ("
+                + POT_ID_COL + " INTEGER PRIMARY KEY, " +
+                POT_POINTS_COL + " INT" + ")")
+        db.execSQL(potQuery)
+
+        // Initialize pot with zero points
+        val values = ContentValues()
+        values.put(POT_POINTS_COL, 0)
+        db.insert(POT_TABLE_NAME, null, values)
     }
 
     override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME)
+        db.execSQL("DROP TABLE IF EXISTS " + POT_TABLE_NAME)
         onCreate(db)
     }
+
+    fun updatePot(points: Int) {
+        val db = this.writableDatabase
+        val cursor = db.rawQuery("SELECT $POT_POINTS_COL FROM $POT_TABLE_NAME WHERE $POT_ID_COL = 1", null)
+        if (cursor.moveToFirst()) {
+            val currentPotPoints = cursor.getInt(cursor.getColumnIndexOrThrow(POT_POINTS_COL))
+            val newPotPoints = currentPotPoints + points
+
+            val values = ContentValues()
+            values.put(POT_POINTS_COL, newPotPoints)
+            db.update(POT_TABLE_NAME, values, "$POT_ID_COL = ?", arrayOf("1"))
+        }
+        cursor.close()
+    }
+
+    fun getPotPoints(): Int {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT $POT_POINTS_COL FROM $POT_TABLE_NAME WHERE $POT_ID_COL = 1", null)
+        var potPoints = 0
+        if (cursor.moveToFirst()) {
+            potPoints = cursor.getInt(cursor.getColumnIndexOrThrow(POT_POINTS_COL))
+        }
+        cursor.close()
+        return potPoints
+    }
+
+    fun resetPot() {
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(POT_POINTS_COL, 0)
+        db.update(POT_TABLE_NAME, values, "$POT_ID_COL = ?", arrayOf("1"))
+    }
+
 
     fun addPlayer(name : String){
         val values = ContentValues()
@@ -70,7 +114,7 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
     companion object{
         private val DATABASE_NAME = "HIGHEST_CARD"
 
-        private val DATABASE_VERSION = 3
+        private val DATABASE_VERSION = 4
 
         val TABLE_NAME = "players"
 
@@ -81,5 +125,11 @@ class DBHelper(context: Context, factory: SQLiteDatabase.CursorFactory?) :
         val POINTS_COL = "points"
 
         val GAMES_COL = "games"
+
+        private val POT_TABLE_NAME = "pot"
+
+        private val POT_ID_COL = "id"
+
+        private val POT_POINTS_COL = "points"
     }
 }

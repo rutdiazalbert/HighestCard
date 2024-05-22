@@ -19,6 +19,7 @@ import android.os.Environment
 import android.os.Handler
 import android.provider.CalendarContract
 import android.provider.MediaStore
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.Window
@@ -39,6 +40,7 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.OutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -70,9 +72,6 @@ class GameActivity : AppCompatActivity() {
     private val songs = listOf(
         R.raw.one_piece1,
         R.raw.juego_tronos,
-        R.raw.dragon_ball,
-        R.raw.super_mario_bros,
-        R.raw.booker_t,
         R.raw.one_piece2
     )
     private var currentSongIndex = 0  // Índice de la canción actual
@@ -82,12 +81,16 @@ class GameActivity : AppCompatActivity() {
     private lateinit var cameraSoundPlayer: MediaPlayer
     private val REQUEST_PERMISSION_CODE = 101
     private val WRITE_CALENDAR_PERMISSION_REQUEST = 101
+    private lateinit var firestore: FirebaseFirestore
+    private var pot = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        //Inicializar Firestore
+        firestore = FirebaseFirestore.getInstance()
         initializeMusic()
         // Inicializar el reproductor de música
         mediaPlayer = MediaPlayer.create(this, songs[currentSongIndex])
@@ -184,6 +187,7 @@ class GameActivity : AppCompatActivity() {
         title.text = "HIGHEST CARD BATTLE"
 
         btnRanking = findViewById(R.id.bottomNavigationView)
+        pot = dbHelper.getPotPoints()
     }
 
     private fun showBetDialModal() {
@@ -251,6 +255,7 @@ class GameActivity : AppCompatActivity() {
                 if (player == dealBet) {
                     title.text = "YOU WON THE GAME"
                     btnDeal.text = "NEW GAME"
+                    pot = 0
                     saveResults(true)
                 }
             }
@@ -367,16 +372,74 @@ class GameActivity : AppCompatActivity() {
             playerGames = getInt(getColumnIndexOrThrow(DBHelper.GAMES_COL))
 
             if (playerWin) {
-                playerPoints += dealBet
+                val potPoints = dbHelper.getPotPoints()
+                playerPoints += dealBet + potPoints
+                dbHelper.resetPot()
             } else {
                 playerPoints -= dealBet
+                dbHelper.updatePot(dealBet)
             }
             playerGames++
 
             dbHelper.updatePlayer(name, playerGames, playerPoints)
+            dbHelper.updatePot(pot)
         }
         totalPoints.text = "Total points: $playerPoints"
         checkGameEnd()
+
+        //Guarda los datos en Firestore
+        savePlayerToFirestore(name, playerPoints)
+    }
+
+    private fun savePlayerToFirestore(playerName: String, playerPoints: Int) {
+        val playerData = hashMapOf(
+            "name" to playerName,
+            "points" to playerPoints
+        )
+
+        firestore.collection("players")
+            .document(playerName)
+            .set(playerData)
+            .addOnSuccessListener {
+                Log.d("Firestore", "Player data successfully written!")
+            }
+            .addOnFailureListener { e ->
+                Log.w("Firestore", "Error writing player data", e)
+            }
+    }
+
+    private fun saveTopPlayersToFirestore() {
+        val cursor = dbHelper.getPlayers()
+        val playersList = mutableListOf<Map<String, Any>>()
+
+        cursor?.apply {
+            while (moveToNext()) {
+                val name = getString(getColumnIndexOrThrow(DBHelper.NAME_COl))
+                val points = getInt(getColumnIndexOrThrow(DBHelper.POINTS_COL))
+                val playerData = mapOf(
+                    "name" to name,
+                    "points" to points
+                )
+                playersList.add(playerData)
+            }
+            close()
+        }
+
+        // Ordenar los jugadores por puntos y tomar los 10 primeros
+        val topPlayers = playersList.sortedByDescending { it["points"] as Int }.take(10)
+
+        topPlayers.forEach { player ->
+            val playerName = player["name"] as String
+            firestore.collection("players")
+                .document(playerName)
+                .set(player)
+                .addOnSuccessListener {
+                    Log.d("Firestore", "Top player data successfully written!")
+                }
+                .addOnFailureListener { e ->
+                    Log.w("Firestore", "Error writing top player data", e)
+                }
+        }
     }
 
     private fun getCurrentLocation(): String {
@@ -433,7 +496,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun initializeMusic() {
-        mediaPlayer = MediaPlayer.create(this, R.raw.booker_t)
+        mediaPlayer = MediaPlayer.create(this, R.raw.one_piece1)
         mediaPlayer.isLooping = true
         cameraSoundPlayer = MediaPlayer.create(this, R.raw.camera)
     }
@@ -497,6 +560,7 @@ class GameActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mediaPlayer.release()
+        saveTopPlayersToFirestore()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

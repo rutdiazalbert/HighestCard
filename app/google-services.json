@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "713924674867",
+    "project_id": "highestcardwingame",
+    "storage_bucket": "highestcardwingame.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:713924674867:android:2211b3f232e1c6cf7a2a46",
+        "android_client_info": {
+          "package_name": "com.example.highestcardwingame"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "713924674867-j5gqj9fa8gc00qqvg61j17ivr58uo392.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.highestcardwingame",
+            "certificate_hash": "352e4936f583a4b797b8927324338901b8461c2a"
+          }
+        },
+        {
+          "client_id": "713924674867-7341dur3m0os7is33lpp14mffqdmgv7h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCP0o9_dJh1nvPliw8WEzgzue5Cx6butt0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "713924674867-7341dur3m0os7is33lpp14mffqdmgv7h.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -17,5 +17,7 @@
     <string name="app_name">HIGHEST CARD BATTLE</string>
     <string name="total_points">Total points</string>
 
+    <string name="default_web_client_id">713924674867-j5gqj9fa8gc00qqvg61j17ivr58uo392.apps.googleusercontent.com</string>
+
 
 </resources>

@@ -4,7 +4,6 @@ import DBHelper
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.Gravity
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -17,7 +16,16 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.common.SignInButton
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
@@ -25,6 +33,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var submitButton: Button
     private lateinit var menu: BottomNavigationView
     private lateinit var languageSpinner: Spinner
+    private lateinit var auth: FirebaseAuth;
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var signInButton: SignInButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +43,9 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main2)
         setupViews()
         setupMenu()
+        setupGoogleSignIn()
+
+        auth = FirebaseAuth.getInstance()
     }
 
     private fun setupViews() {
@@ -113,6 +127,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun callActivity() {
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            Toast.makeText(this, "Please sign in first", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         val playerNameInput = playerName.text.toString()
         val db = DBHelper(this, null)
 
@@ -123,5 +143,90 @@ class MainActivity : AppCompatActivity() {
             putExtra("PLAYER", playerNameInput)
         }
         startActivity(intent)
+    }
+
+    private fun setupGoogleSignIn() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+
+        googleSignInClient = GoogleSignIn.getClient(this, gso)
+
+        signInButton = findViewById(R.id.sign_in_button)
+        signInButton.setOnClickListener {
+            signIn()
+        }
+
+        val signOutButton = findViewById<Button>(R.id.sign_out_button)
+        signOutButton.setOnClickListener {
+            signOut()
+        }
+    }
+
+    private fun signIn() {
+        val signInIntent = googleSignInClient.signInIntent
+        startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+
+    private fun signOut() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            FirebaseAuth.getInstance().signOut()
+            googleSignInClient.signOut().addOnCompleteListener(this) {
+                Toast.makeText(
+                    this,
+                    "Logout successfully. See you soon ${user?.displayName}!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }.addOnFailureListener {
+                Toast.makeText(
+                    this,
+                    "Logout failed. Please try again.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        } else {
+            Toast.makeText(
+                this,
+                "Already logged out, please Sign In first.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == RC_SIGN_IN) {
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            handleSignInResult(task)
+        }
+    }
+
+    private fun handleSignInResult(task: Task<GoogleSignInAccount>) {
+        try {
+            val account = task.getResult(ApiException::class.java)
+            firebaseAuthWithGoogle(account)
+        } catch (e: ApiException) {
+            Toast.makeText(this, "Google sign-in failed: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
+        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(this) { task ->
+                if (task.isSuccessful) {
+                    val user = auth.currentUser
+                    Toast.makeText(this, "Authentication successful. Welcome ${user?.displayName}!", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Authentication failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
+    companion object {
+        private const val RC_SIGN_IN = 9001
     }
 }

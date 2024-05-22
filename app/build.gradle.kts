@@ -1,6 +1,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+
+    // Add the Google services Gradle plugin
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -45,4 +48,19 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Firebase Authentication
+    implementation("com.google.firebase:firebase-auth-ktx:21.0.6")
+
+    // Google Sign-In
+    implementation("com.google.android.gms:play-services-auth:20.2.0")
+
+    implementation (platform("com.google.firebase:firebase-bom:31.0.0"))
+    implementation ("com.google.firebase:firebase-auth")
+    implementation ("com.google.firebase:firebase-database")
+    implementation ("com.google.firebase:firebase-firestore-ktx:23.0.3")
+
 }
+
+// Apply the Google services plugin
+apply(plugin = "com.google.gms.google-services")
